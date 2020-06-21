@@ -1,90 +1,113 @@
-    export interface Resolf {
-        id: number;
-        path: string;
-        dev: boolean;
-        optional: boolean;
-        bundled: boolean;
-    }
+export enum ActionType {
+    INSTALL = 'install',
+    UPDATE = 'update'
+}
 
-    export interface Action {
-        isMajor: boolean;
-        action: string;
-        resolves: Resolf[];
-        module: string;
-        target: string;
-    }
+export interface IResolvedByAction {
+    id: number;
+    path: string;
+    dev: boolean;
+    optional: boolean;
+    bundled: boolean;
+}
 
-    export interface Finding {
-        version: string;
-        paths: string[];
-    }
+export interface IAction {
+    action: ActionType;
+    module: string;
+    target: string;
+    isMajor: boolean;
+    depth?: number;
+    resolves: IResolvedByAction[];
+}
+// end: actions
 
-    export interface FoundBy {
-        link: string;
-        name: string;
-        email: string;
-    }
+// begin: advisories
+export interface IFinding {
+    version: string;
+    paths: string[];
+    dev: boolean;
+    optional: boolean;
+    bundled: boolean;
+}
 
-    export interface ReportedBy {
-        link: string;
-        name: string;
-        email: string;
-    }
+export interface IFoundBy {
+    name: string;
+}
 
-    export interface AdvisorMetadata {
-        module_type: string;
-        exploitability: number;
-        affected_components: string;
-    }
+export interface IReportedBy {
+    name: string;
+}
 
-    export interface Advisories {
-        [id: string]: Advisor;
-        
-    }
+export enum AccessType {
+    PUBLIC = 'public'
+}
 
-    export interface Advisor {
-        findings: Finding[];
-        id: number;
-        created: Date;
-        updated: Date;
-        deleted?: any;
-        title: string;
-        found_by: FoundBy;
-        reported_by: ReportedBy;
-        module_name: string;
-        cves: any[];
-        vulnerable_versions: string;
-        patched_versions: string;
-        overview: string;
-        recommendation: string;
-        references: string;
-        access: string;
-        severity: string;
-        cwe: string;
-        metadata: AdvisorMetadata;
-        url: string;
-    }
+export enum SeverityType {
+    CRITICAL = 'critical'
+}
 
-    export interface Vulnerabilities {
-        info: number;
-        low: number;
-        moderate: number;
-        high: number;
-        critical: number;
-    }
+export interface IAdvisoryMetadata {
+    module_type: string;
+    exploitability: number;
+    affected_components: string;
+}
 
-    export interface Metadata {
-        vulnerabilities: Vulnerabilities;
-        dependencies: number;
-        devDependencies: number;
-        optionalDependencies: number;
-        totalDependencies: number;
-    }
+export interface IAdvisory {
+    findings: IFinding[];
+    id: number;
+    created: Date;
+    updated: Date;
+    deleted: Date;
+    title: string;
+    found_by: IFoundBy;
+    reported_by: IReportedBy;
+    module_name: string;
+    cves: string[];
+    vulnerable_versions: string;
+    patched_versions: string;
+    overview: string;
+    recommendation: string;
+    references: string;
+    access: AccessType;
+    severity: SeverityType;
+    cwe: string;
+    metadata: IAdvisoryMetadata;
+    url: string;
+}
 
-    export interface RootObject {
-        actions: Action[];
-        advisories: Advisories;
-        muted: any[];
-        metadata: Metadata;
-        runId: string;
-    }
+export interface IAdvisories {
+    [advisoryId: string]: IAdvisory;
+}
+// end: advisories
+
+// begin: muted
+export interface IMuted {
+// TODO: determine what this contains, when not an empty array
+}
+// end: muted
+
+// begin: metadata
+export interface IVulnerabilities {
+    info: number;
+    low: number;
+    moderate: number;
+    high: number;
+    critical: number;
+}
+
+export interface IMetadata {
+    vulnerabilities: IVulnerabilities;
+    dependencies: number;
+    devDependencies: number;
+    optionalDependencies: number;
+    totalDependencies: number;
+}
+// end: metadata
+
+export default interface IAudit {
+    actions: IAction[];
+    advisories: IAdvisories;
+    muted: IMuted[];
+    metadata: IMetadata;
+    runId: string;
+}

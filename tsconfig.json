@@ -15,7 +15,7 @@
     },
     "include": [
       "src",
-      "spec"
+      "spec", "webpack.config.js"
     ],
     "exclude": [
       "node_modules",
